@@ -1,0 +1,35 @@
+{% block body %}
+    <form action="{{ path('form_edit_vehicle') }}" method="post">
+        {{ form_widget(form) }}
+        <input type="submit" value="Enregistrer"/>
+    </form>
+{% endblock %}
+ 
+{% block other_javascripts %}
+ 
+    <script>
+        var $sport = $('#user_vehicle_vehicle_mark');
+        // When sport gets selected ...
+        $sport.change(function () {
+            // ... retrieve the corresponding form.
+            var $form = $(this).closest('form');
+            // Simulate form data, but only include the selected sport value.
+            var data = {};
+            data[$sport.attr('name')] = $sport.val();
+            // Submit data via AJAX to the form's action path.
+            $.ajax({
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                data: data,
+                success: function (html) {
+                    // Replace current position field ...
+                    $('#user_vehicle_vehicle_model').replaceWith(
+                            // ... with the returned one from the AJAX response.
+                            $(html).find('#user_vehicle_vehicle_model')
+                    );
+                    // Position field now displays the appropriate positions.
+                }
+            });
+        });
+    </script>
+{% endblock %}
